@@ -51,4 +51,13 @@ public class FacultyController {
         facultyService.removeFaculty(id);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/get-by-color")
+    public ResponseEntity<Collection<Faculty>> getFacultiesByColor(@RequestParam String color) {
+        if (color != null) {
+            return ResponseEntity.ok(facultyService.getFacultiesByColor(color));
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

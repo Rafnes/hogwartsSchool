@@ -11,7 +11,7 @@ public class FacultyService {
     private long idCounter;
 
     public Faculty createFaculty(Faculty faculty) {
-        faculty.setId(idCounter++);
+        faculty.setId(++idCounter);
         faculties.put(idCounter, faculty);
         return faculty;
     }
