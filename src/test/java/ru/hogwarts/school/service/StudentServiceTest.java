@@ -33,19 +33,19 @@ class StudentServiceTest {
     @Test
     void testCreateStudent() {
         when(studentRepository.save(student1)).thenReturn(student1);
-        Student actual = studentService.createStudent(student1);
+        Student actual = studentService.createStudent(student1, 1L);
         assertEquals(student1.getName(), actual.getName());
         verify(studentRepository).save(student1);
     }
 
     @Test
     void shouldThrowWhenNameIsBlank() {
-        assertThrows(IllegalArgumentException.class, () -> studentService.createStudent(new Student("", 10)));
+        assertThrows(IllegalArgumentException.class, () -> studentService.createStudent(new Student("", 10), 1L));
     }
 
     @Test
     void shouldThrowWhenAgeIsInvalid() {
-        assertThrows(IllegalArgumentException.class, () -> studentService.createStudent(new Student("John", 0)));
+        assertThrows(IllegalArgumentException.class, () -> studentService.createStudent(new Student("John", 0), 1L));
     }
 
     @Test
