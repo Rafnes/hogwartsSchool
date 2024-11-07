@@ -97,10 +97,10 @@ class FacultyServiceTest {
 
     @Test
     void testGetFacultiesByColor() {
-        when(facultyRepository.findByColor("black")).thenReturn(List.of(faculty1));
+        when(facultyRepository.findByColorIgnoreCase("black")).thenReturn(List.of(faculty1));
 
-        List<Faculty> result = (List<Faculty>) facultyService.getFacultiesByColor("black");
+        List<Faculty> result = (List<Faculty>) facultyService.findFacultiesByColor("black");
         assertTrue(result.contains(faculty1));
-        verify(facultyRepository).findByColor("black");
+        verify(facultyRepository).findByColorIgnoreCase("black");
     }
 }
