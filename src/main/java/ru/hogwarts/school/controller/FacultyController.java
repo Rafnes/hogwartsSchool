@@ -34,7 +34,7 @@ public class FacultyController {
 
     @GetMapping("{id}/students")
     public ResponseEntity<Collection<Student>> getStudents(@PathVariable long id) {
-        return ResponseEntity.ok(facultyService.findFaculty(id).getStudents());
+        return ResponseEntity.ok(facultyService.getStudentsByFaculty(id));
     }
 
     @PostMapping
