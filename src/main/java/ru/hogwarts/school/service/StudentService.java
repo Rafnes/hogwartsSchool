@@ -30,7 +30,9 @@ public class StudentService {
         return studentRepository.findById(id).get();
     }
 
-    public Student updateStudent(Student student) {
+    public Student updateStudent(Student student, Long facultyId) {
+        Faculty faculty = facultyRepository.findById(facultyId).orElseThrow();
+        student.setFaculty(faculty);
         return studentRepository.save(student);
     }
 
