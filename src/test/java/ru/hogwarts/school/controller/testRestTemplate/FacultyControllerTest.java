@@ -1,4 +1,4 @@
-package ru.hogwarts.school.controller;
+package ru.hogwarts.school.controller.testRestTemplate;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
