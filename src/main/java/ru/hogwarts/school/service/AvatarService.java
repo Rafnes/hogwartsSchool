@@ -1,6 +1,7 @@
 package ru.hogwarts.school.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -98,5 +100,14 @@ public class AvatarService {
 
     public void setPathDir(Path pathDir) {
         this.pathDir = pathDir;
+    }
+
+    public List<Avatar> getAvatars(Integer pageNumber, Integer pageSize) {
+        if (pageSize > 0 && pageNumber > 0) {
+            PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
+            return avatarRepository.findAll(pageRequest).getContent();
+        } else {
+            throw new IllegalArgumentException("Переданы некорректные параметры страницы");
+        }
     }
 }

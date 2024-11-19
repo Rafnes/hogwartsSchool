@@ -1,14 +1,16 @@
-package ru.hogwarts.school.controller;
+package ru.hogwarts.school.controller.testWebMVC;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.convert.DataSizeUnit;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
@@ -239,5 +241,46 @@ class StudentControllerTest {
                 .andExpect(jsonPath("$[1].age").value(student2.getAge()));
 
         verify(studentRepository, times(1)).findByAgeBetween(10, STUDENT_AGE_2);
+    }
+
+    @Test
+    @DisplayName("Корректно получает количество студентов")
+    void testGetAmount() throws Exception {
+        when(studentRepository.getStudentsAmount()).thenReturn(10);
+
+        mockMvc.perform(get(path + "/amount"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").value(10));
+
+        verify(studentRepository, times(1)).getStudentsAmount();
+    }
+
+    @Test
+    @DisplayName("Корректно получает средний возраст студентов")
+    void testGetAverageStudentAge() throws Exception {
+        when(studentRepository.getAverageStudentAge()).thenReturn(13.99);
+
+        mockMvc.perform(get(path + "/average-age"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").value(13.99));
+
+        verify(studentRepository, times(1)).getAverageStudentAge();
+    }
+
+    @Test
+    @DisplayName("Корректно получает последние пять студентов")
+    void testGetLastFiveStudents() {
+        long id1 = 1L, id2 = 2L, id3 = 3L, id4 = 4L;
+        Student student1 = new Student(STUDENT_NAME_1, STUDENT_AGE_1);
+        Student student2 = new Student(STUDENT_NAME_2, STUDENT_AGE_2);
+        Student student3 = new Student(STUDENT_NAME_3, STUDENT_AGE_3);
+        Student student4 = new Student(STUDENT_NAME_4, STUDENT_AGE_4);
+        student1.setId(id1);
+        student2.setId(id2);
+        student3.setId(id3);
+        student4.setId(id4);
+
     }
 }

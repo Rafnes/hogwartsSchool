@@ -9,6 +9,7 @@ import ru.hogwarts.school.model.dto.AvatarView;
 import ru.hogwarts.school.service.AvatarService;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/avatar")
@@ -38,5 +39,11 @@ public class AvatarController {
         return ResponseEntity.ok()
                 .contentType(view.getMediaType())
                 .body(view.getContent());
+    }
+
+    @GetMapping("/get/pages")
+    public ResponseEntity<List<Avatar>> getAvatars(@RequestParam("pageNumber") Integer pageNumber,
+                                                   @RequestParam("pageSize") Integer pageSize) {
+        return ResponseEntity.ok(avatarService.getAvatars(pageNumber, pageSize));
     }
 }
