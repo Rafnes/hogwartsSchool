@@ -1,6 +1,5 @@
 package ru.hogwarts.school.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -13,6 +12,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static ru.hogwarts.school.TestData.*;
 
 class StudentServiceTest {
     Student student1 = new Student("Lewis Hamilton", 15);
@@ -103,4 +103,51 @@ class StudentServiceTest {
         assertTrue(result.contains(student1));
         verify(studentRepository).findByAge(15);
     }
+
+    @Test
+    void testGetStudentsAmount() {
+        int expected = 10;
+
+        //test
+        when(studentRepository.getStudentsAmount()).thenReturn(10);
+
+        //check
+        int actual = studentService.getStudentsAmount();
+        assertEquals(expected, actual);
+        verify(studentRepository, times(1)).getStudentsAmount();
+    }
+
+    @Test
+    void testGetAverageStudentAge() {
+        when(studentRepository.getAverageStudentAge()).thenReturn(14.55);
+
+        //check
+        double expected = 14.55;
+        double actual = studentService.getAverageStudentAge();
+        assertEquals(expected, actual);
+        verify(studentRepository, times(1)).getAverageStudentAge();
+    }
+
+    @Test
+    void testGetLastFiveStudents() {
+        Student student1 = new Student(STUDENT_NAME_1, STUDENT_AGE_1);
+        Student student2 = new Student(STUDENT_NAME_2, STUDENT_AGE_2);
+        Student student3 = new Student(STUDENT_NAME_3, STUDENT_AGE_4);
+        Student student4 = new Student(STUDENT_NAME_4, STUDENT_AGE_4);
+        student1.setId(1L);
+        student2.setId(2L);
+        student3.setId(3L);
+        student4.setId(4L);
+        List<Student> expected = new ArrayList<>(List.of(student4, student3, student2, student1));
+        when(studentRepository.getLastFiveStudents()).thenReturn(List.of(student4, student3, student2, student1));
+
+        //test
+        List<Student> actual = studentService.getLastFiveStudents();
+
+        //check
+        assertEquals(expected, actual);
+        assertTrue(actual.containsAll(expected));
+        verify(studentRepository, times(1)).getLastFiveStudents();
+    }
+
 }
