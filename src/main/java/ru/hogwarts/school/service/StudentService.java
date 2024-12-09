@@ -106,7 +106,6 @@ public class StudentService {
         logger.info("Method getAverageStudentAgeStream was invoked");
         List<Student> students = studentRepository.findAll();
         return students.stream()
-                .parallel()
                 .mapToDouble(Student::getAge)
                 .average()
                 .orElse(0.0);
