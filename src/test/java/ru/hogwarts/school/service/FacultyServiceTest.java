@@ -2,6 +2,7 @@ package ru.hogwarts.school.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestClassOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -102,5 +103,29 @@ class FacultyServiceTest {
         List<Faculty> result = (List<Faculty>) facultyService.findFacultiesByColor("black");
         assertTrue(result.contains(faculty1));
         verify(facultyRepository).findByColorIgnoreCase("black");
+    }
+
+    @Test
+    void testGetLongestFacultyName() {
+        when(facultyRepository.findAll()).thenReturn(List.of(faculty1, faculty2));
+
+        //test
+        String actual = facultyService.getLongestFacultyName();
+
+        //check
+        assertEquals(faculty2.getName(), actual);
+        verify(facultyRepository).findAll();
+    }
+
+    @Test
+    void testGetLongestFacultyNameReturnsMessageWhenRepoIsEmpty() {
+        when(facultyRepository.findAll()).thenReturn(Collections.emptyList());
+
+        //test
+        String actual = facultyService.getLongestFacultyName();
+
+        //check
+        assertEquals("No faculties found", actual);
+        verify(facultyRepository).findAll();
     }
 }

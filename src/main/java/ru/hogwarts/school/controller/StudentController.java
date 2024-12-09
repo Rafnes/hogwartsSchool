@@ -92,4 +92,19 @@ public class StudentController {
     public ResponseEntity<List<Student>> getLastFiveStudents() {
         return ResponseEntity.ok(studentService.getLastFiveStudents());
     }
+
+    @GetMapping("names/starts-with-a-stream-api")
+    public ResponseEntity<List<String>> getNamesThatStartWithAInAlphaOrder() {
+        return ResponseEntity.ok(studentService.getNamesThatStartWithAInAlphaOrder());
+    }
+
+    @GetMapping("average-age-stream-api")
+    public Double getAverageStudentAgeStreamApi() {
+        return studentService.getAverageStudentAgeStream();
+    }
+
+    @GetMapping("sum-method-stream-api")
+    public int sumMethodStream() {
+        return studentService.sumMethodStream();
+    }
 }
