@@ -10,6 +10,10 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 @Service
 public class StudentService {
@@ -86,5 +90,39 @@ public class StudentService {
     public List<Student> getLastFiveStudents() {
         logger.info("Method getLastFiveStudents was invoked");
         return studentRepository.getLastFiveStudents();
+    }
+
+    public List<String> getNamesThatStartWithAInAlphaOrder() {
+        logger.info("Method getNamesThatStartWithAInAlphaOrder was invoked");
+        List<Student> students = studentRepository.findAll();
+        return students.stream()
+                .filter(s -> s.getName().startsWith("A"))
+                .map(s -> s.getName().toUpperCase())
+                .sorted()
+                .toList();
+    }
+
+    public double getAverageStudentAgeStream() {
+        logger.info("Method getAverageStudentAgeStream was invoked");
+        List<Student> students = studentRepository.findAll();
+        return students.stream()
+                .mapToDouble(Student::getAge)
+                .average()
+                .orElse(0.0);
+    }
+
+    public int sumMethodStream() {
+        long start = System.currentTimeMillis();
+        int sum = Stream.iterate(1, a -> a + 1)
+                .limit(1_000_000)
+                .reduce(0, (a, b) -> a + b);
+        logger.info("Time elapsed in sequential: {}", System.currentTimeMillis() - start);
+
+        start = System.currentTimeMillis();
+        int sum2 = IntStream.rangeClosed(1, 1_000_000)
+                .parallel()
+                .reduce(0, (a, b) -> a + b);
+        logger.info("Time elapsed in parallel: {}", System.currentTimeMillis() - start);
+        return sum2;
     }
 }

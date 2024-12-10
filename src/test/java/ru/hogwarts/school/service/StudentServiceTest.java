@@ -150,4 +150,51 @@ class StudentServiceTest {
         verify(studentRepository, times(1)).getLastFiveStudents();
     }
 
+    @Test
+    void testGetNamesThatStartWithAInAlphaOrder() {
+        Student student1 = new Student("Chris", STUDENT_AGE_1);
+        Student student2 = new Student("Alan", STUDENT_AGE_2);
+        Student student3 = new Student("Zoey", STUDENT_AGE_4);
+        Student student4 = new Student("Alfredo", STUDENT_AGE_4);
+        List<Student> students = List.of(student1, student2, student3, student4);
+        when(studentRepository.findAll()).thenReturn(students);
+
+        //test
+        List<String> result = studentService.getNamesThatStartWithAInAlphaOrder();
+
+        //check
+        assertEquals(2, result.size());
+        assertEquals("ALAN", result.get(0));
+        assertEquals("ALFREDO", result.get(1));
+        verify(studentRepository).findAll();
+    }
+
+    @Test
+    void testGetAverageStudentAgeStream() {
+        Student student1 = new Student(STUDENT_NAME_1, 20);
+        Student student2 = new Student(STUDENT_NAME_2, 24);
+        List<Student> students = List.of(student1, student2);
+
+        when(studentRepository.findAll()).thenReturn(students);
+
+        //test
+        Double actual = studentService.getAverageStudentAgeStream();
+        Double expected = 22.0;
+
+        //check
+        assertEquals(expected, actual);
+        verify(studentRepository).findAll();
+    }
+
+    @Test
+    void testGetAverageStudentAgeStreamReturnsZeroWhenRepoIsEmpty() {
+        when(studentRepository.findAll()).thenReturn(Collections.emptyList());
+
+        //test
+        Double actual = studentService.getAverageStudentAgeStream();
+
+        //check
+        assertEquals(0.0, actual);
+        verify(studentRepository).findAll();
+    }
 }
