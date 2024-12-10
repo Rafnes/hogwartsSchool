@@ -96,13 +96,13 @@ public class StudentService {
         logger.info("Method getNamesThatStartWithAInAlphaOrder was invoked");
         List<Student> students = studentRepository.findAll();
         return students.stream()
-                .filter(s -> s.getName().toUpperCase().startsWith("A"))
+                .filter(s -> s.getName().startsWith("A"))
                 .map(s -> s.getName().toUpperCase())
                 .sorted()
                 .toList();
     }
 
-    public Double getAverageStudentAgeStream() {
+    public double getAverageStudentAgeStream() {
         logger.info("Method getAverageStudentAgeStream was invoked");
         List<Student> students = studentRepository.findAll();
         return students.stream()

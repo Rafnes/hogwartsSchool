@@ -99,7 +99,7 @@ public class StudentController {
     }
 
     @GetMapping("average-age-stream-api")
-    public Double getAverageStudentAgeStreamApi() {
+    public double getAverageStudentAgeStreamApi() {
         return studentService.getAverageStudentAgeStream();
     }
 

@@ -117,14 +117,11 @@ class FacultyServiceTest {
     }
 
     @Test
-    void testGetLongestFacultyNameReturnsMessageWhenRepoIsEmpty() {
+    void testGetLongestFacultyNameThrowsWhenRepoIsEmpty() {
         when(facultyRepository.findAll()).thenReturn(Collections.emptyList());
 
-        //test
-        String actual = facultyService.getLongestFacultyName();
+        assertThrows(RuntimeException.class, () -> facultyService.getLongestFacultyName());
 
-        //check
-        assertEquals("No faculties found", actual);
         verify(facultyRepository).findAll();
     }
 }

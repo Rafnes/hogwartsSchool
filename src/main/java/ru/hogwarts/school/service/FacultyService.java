@@ -80,8 +80,8 @@ public class FacultyService {
         logger.info("Method getLongestFacultyName was invoked");
         List<Faculty> faculties = facultyRepository.findAll();
         return faculties.stream()
-                .reduce((f1, f2) -> f1.getName().length() >= f2.getName().length() ? f1 : f2)
+                .max(Comparator.comparingInt(f -> f.getName().length()))
                 .map(f -> f.getName())
-                .orElse("No faculties found");
+                .orElseThrow(() -> new RuntimeException("No faculties found"));
     }
 }
