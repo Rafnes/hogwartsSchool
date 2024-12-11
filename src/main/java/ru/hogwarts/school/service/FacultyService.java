@@ -10,6 +10,7 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class FacultyService {
@@ -44,7 +45,7 @@ public class FacultyService {
 
     public void removeFaculty(long id) {
         logger.info("Deleting faculty with id: {}", id);
-        if(!facultyRepository.existsById(id)) {
+        if (!facultyRepository.existsById(id)) {
             logger.warn("Faculty with id: {} not found, there is no entity to delete", id);
         }
         facultyRepository.deleteById(id);
@@ -73,5 +74,14 @@ public class FacultyService {
     public Collection<Faculty> findFacultiesByName(String name) {
         logger.info("Finding faculties with name: {}", name);
         return facultyRepository.findByNameIgnoreCase(name);
+    }
+
+    public String getLongestFacultyName() {
+        logger.info("Method getLongestFacultyName was invoked");
+        List<Faculty> faculties = facultyRepository.findAll();
+        return faculties.stream()
+                .max(Comparator.comparingInt(f -> f.getName().length()))
+                .map(f -> f.getName())
+                .orElseThrow(() -> new RuntimeException("No faculties found"));
     }
 }
