@@ -281,6 +281,45 @@ class StudentControllerTest {
         student2.setId(id2);
         student3.setId(id3);
         student4.setId(id4);
+    }
 
+    @Test
+    @DisplayName("Корректно выводит в консоль 6 студентов параллельно")
+    void testPrintParallel() throws Exception {
+        Student student1 = new Student(STUDENT_NAME_1, STUDENT_AGE_1);
+        Student student2 = new Student(STUDENT_NAME_2, STUDENT_AGE_2);
+        Student student3 = new Student(STUDENT_NAME_3, STUDENT_AGE_3);
+        Student student4 = new Student(STUDENT_NAME_4, STUDENT_AGE_4);
+        Student student5 = new Student(STUDENT_NAME_5, STUDENT_AGE_5);
+        Student student6 = new Student(STUDENT_NAME_6, STUDENT_AGE_6);
+        Student student7 = new Student(STUDENT_NAME_7, STUDENT_AGE_7);
+        when(studentRepository.findAll()).thenReturn(List.of(student1, student2, student3, student4, student5, student6, student7));
+
+        mockMvc.perform(get(path + "/print-parallel"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").value("Printing students in parallel mode"));
+
+        verify(studentRepository).findAll();
+    }
+
+    @Test
+    @DisplayName("Корректно выводит в консоль 6 студентов синхронно")
+    void testPrintSynchronized() throws Exception {
+        Student student1 = new Student(STUDENT_NAME_1, STUDENT_AGE_1);
+        Student student2 = new Student(STUDENT_NAME_2, STUDENT_AGE_2);
+        Student student3 = new Student(STUDENT_NAME_3, STUDENT_AGE_3);
+        Student student4 = new Student(STUDENT_NAME_4, STUDENT_AGE_4);
+        Student student5 = new Student(STUDENT_NAME_5, STUDENT_AGE_5);
+        Student student6 = new Student(STUDENT_NAME_6, STUDENT_AGE_6);
+        Student student7 = new Student(STUDENT_NAME_7, STUDENT_AGE_7);
+        when(studentRepository.findAll()).thenReturn(List.of(student1, student2, student3, student4, student5, student6, student7));
+
+        mockMvc.perform(get(path + "/print-synchronized"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").value("Printing students in synchronized mode"));
+
+        verify(studentRepository).findAll();
     }
 }
