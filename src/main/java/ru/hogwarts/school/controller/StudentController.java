@@ -107,4 +107,14 @@ public class StudentController {
     public int sumMethodStream() {
         return studentService.sumMethodStream();
     }
+
+    @GetMapping("print-parallel")
+    public String printParallel() {
+        return studentService.printParallel();
+    }
+
+    @GetMapping("print-synchronized")
+    public String printSynchronized() {
+        return studentService.printSynchronized();
+    }
 }

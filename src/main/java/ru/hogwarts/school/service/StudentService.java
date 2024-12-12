@@ -9,10 +9,10 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.IntStream;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 @Service
@@ -124,5 +124,53 @@ public class StudentService {
                 .reduce(0, (a, b) -> a + b);
         logger.info("Time elapsed in parallel: {}", System.currentTimeMillis() - start);
         return sum2;
+    }
+
+    public String printParallel() {
+        List<Student> students = studentRepository.findAll().stream()
+                .limit(6)
+                .toList();
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        Thread thread1 = new Thread(() -> {
+            System.out.println(students.get(2).getName());
+            System.out.println(students.get(3).getName());
+        });
+        thread1.start();
+
+        Thread thread2 = new Thread(() -> {
+            System.out.println(students.get(4).getName());
+            System.out.println(students.get(5).getName());
+        });
+        thread2.start();
+
+        return "Printing students in parallel mode";
+    }
+
+    public String printSynchronized() {
+        List<Student> students = studentRepository.findAll().stream()
+                .limit(6)
+                .toList();
+        System.out.println(students.get(0).getName());
+        System.out.println(students.get(1).getName());
+
+        Thread thread1 = new Thread(() -> {
+            printStudentNamesSynchronized(students.get(2), students.get(3));
+        });
+        thread1.start();
+
+        Thread thread2 = new Thread(() -> {
+            printStudentNamesSynchronized(students.get(4), students.get(5));
+        });
+        thread2.start();
+        return "Printing students in synchronized mode";
+    }
+
+    private void printStudentNamesSynchronized(Student student1, Student student2) {
+        synchronized (this) {
+            System.out.println(student1.getName());
+            System.out.println(student2.getName());
+        }
     }
 }
